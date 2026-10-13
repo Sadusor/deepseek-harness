@@ -37,7 +37,7 @@ describe('Personal Qwen / Ollama wire contract', () => {
       provider: 'ollama-local',
       model: 'qwen35-9b-orion:latest',
       reasoningEffort: ReasoningEffortId('off'),
-      messages: [createUserMessage({ content: [{ type: 'text', text: 'Reply 123' }] })],
+      messages: [createUserMessage({ source: { kind: 'model', provider: 'ollama-local', model: 'qwen35-9b-orion:latest' }, content: [{ type: 'text', text: 'Reply 123' }] })],
     })
     expect(result.finish).toEqual({ kind: 'stop' })
     expect(server.paths).toEqual(['/v1/chat/completions'])
@@ -70,7 +70,7 @@ describe('Personal Qwen / Ollama wire contract', () => {
     const result = await assemble(ctx, {
       provider: 'ollama-local',
       model: 'qwen35-9b-orion:latest',
-      messages: [createUserMessage({ content: [{ type: 'text', text: 'Test' }] })],
+      messages: [createUserMessage({ source: { kind: 'model', provider: 'ollama-local', model: 'qwen35-9b-orion:latest' }, content: [{ type: 'text', text: 'Test' }] })],
     })
     expect(result.finish).toEqual({ kind: 'max-tokens' })
   })
