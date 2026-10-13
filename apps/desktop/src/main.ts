@@ -465,7 +465,7 @@ async function main(): Promise<void> {
         const accountBackend = welcomeBackend.account
         stopAccount = accountBackend.watch((state) => {
           if (quitting) return
-          if (welcomeWindow !== undefined && !welcomeWindow.isDestroyed()) welcomeWindow.webContents.send(WELCOME_IPC.state, state)
+          if (welcomeWindow !== undefined && !welcomeWindow.isDestroyed()) welcomeWindow?.webContents.send(WELCOME_IPC.state, state)
           const attempt = state.attempt
           if (attempt?.phase === 'waiting-browser' && attempt.authorizeUrl !== undefined && openedAttempt !== attempt.id) {
             openedAttempt = attempt.id
@@ -477,11 +477,11 @@ async function main(): Promise<void> {
           }
           if (state.status === 'credential-stored' && attempt?.phase === 'succeeded' && welcomeWindow !== undefined) void enterWorkspace({ activate: false }).catch(() => undefined)
           if (previousAccountStatus === 'credential-stored' && state.status === 'signed-out') {
-            void readWelcomeState().then(async (value) => {
+            void readWelcomeState().then(async (_value) => {
               if (false /* Loom local-first workspace: DeepSeek login is optional */ && !quitting) {
                 enteredWorkspace = false
                 await showWelcome()
-                if (welcomeWindow !== undefined && !welcomeWindow.isDestroyed()) welcomeWindow.webContents.send(WELCOME_IPC.state, state)
+                if (welcomeWindow !== undefined && !welcomeWindow.isDestroyed()) welcomeWindow?.webContents.send(WELCOME_IPC.state, state)
               }
               return undefined
             }).catch(() => undefined)
@@ -490,13 +490,13 @@ async function main(): Promise<void> {
         }, () => {
           // The stream reconnects; a transport failure does not change account state.
         }, () => {
-          void readWelcomeState().then(async (value) => {
+          void readWelcomeState().then(async (_value) => {
             if (!false /* Loom local-first workspace: DeepSeek login is optional */ || quitting) return
             pendingWelcomeNotice = 'session-expired'
             enteredWorkspace = false
             await showWelcome()
             const state = await accountBackend.state()
-            if (welcomeWindow !== undefined && !welcomeWindow.isDestroyed()) welcomeWindow.webContents.send(WELCOME_IPC.state, state)
+            if (welcomeWindow !== undefined && !welcomeWindow.isDestroyed()) welcomeWindow?.webContents.send(WELCOME_IPC.state, state)
           }).catch(() => undefined)
         }, (enabled) => { analyticsEnabled = enabled })
       },
@@ -1205,7 +1205,7 @@ async function main(): Promise<void> {
     // Private Loom startup must not depend on DeepSeek account or API-key onboarding.
     // Language can be selected in workspace settings after launch.
     if (isQuitting() || backend.state.phase !== 'ready') return
-    locale = resolveDesktopStartupLocale(undefined, systemLanguages)
+    locale = resolveDesktopStartupLocale(null, systemLanguages)
     windowsLanguage = locale.id
     refreshApplicationMenu()
     if (!enteredWorkspace && false /* Loom local-first workspace: no DeepSeek login gate */) {
