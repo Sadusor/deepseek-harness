@@ -335,7 +335,7 @@ async function main(): Promise<void> {
   // Private Loom packages do not participate in DeepSeek's signed release/update service.
   const loomLocal = invocation.unsigned && invocation.directory && target.name === 'win-x64'
   const environment = loomLocal
-    ? { ...process.env, DSH_DESKTOP_APP_ID: 'com.sadusor.loom', DSH_LOOM_LOCAL_PACKAGE: '1' }
+    ? { ...process.env, 'ProgramFiles(x86)': process.env['ProgramFiles(x86)'] || 'C:\\Program Files (x86)', DSH_DESKTOP_APP_ID: 'com.sadusor.loom', DSH_LOOM_LOCAL_PACKAGE: '1' }
     : loadDesktopPackageEnvironment(target.platform)
   const productVersion = packageVersion(join(APP_ROOT, 'package.json'), 'desktop package')
   // Release settings come from the target dotenv file alone, so the version this run publishes is an
