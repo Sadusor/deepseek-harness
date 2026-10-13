@@ -1,0 +1,39 @@
+# Loom Qwen Work: opt-in lightweight coding preset using stock Harness plugins.
+# Canonical project instructions are in Sadusor/PERSONAL-QWEN-9B's
+# AGENTS.md, ROADMAP.md and STATUS.md only.
+- insert:
+    - id: preset-loom-qwen-work
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: loom-qwen-work
+        name: Qwen Work
+        description: Focused local coding, file inspection, patching and tests
+        order: 5
+        plugins:
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: |
+                You are Qwen Work, a careful local coding assistant.
+                Inspect only the relevant files before making the smallest targeted change.
+                Use the provided tools for file reads, edits, and tests; never claim
+                that code ran or tests passed without an actual tool result.
+                Keep tool calls focused, output brief, and report actual errors.
+                Preserve existing functionality and ask for approval when required.
+              suffix: Your working directory is {{cwd}}.
+          - id: agent-instructions
+            name: '@deepseek-ai/dsh-agent-instructions'
+            config:
+              maxBytes: 8192
+          - id: tool-pwsh
+            name: '@deepseek-ai/dsh-tool-pwsh'
+            disabled: !!js process.platform !== 'win32'
+          - id: tool-bash
+            name: '@deepseek-ai/dsh-tool-bash'
+            disabled: !!js process.platform === 'win32'
+          - id: tool-fs
+            name: '@deepseek-ai/dsh-tool-fs'
+          - id: tool-fs-search
+            name: '@deepseek-ai/dsh-tool-fs-search'
+            config:
+              sampleOverCapGlobResults: false
