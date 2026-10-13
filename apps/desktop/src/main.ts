@@ -465,7 +465,7 @@ async function main(): Promise<void> {
         const accountBackend = welcomeBackend.account
         stopAccount = accountBackend.watch((state) => {
           if (quitting) return
-          if (welcomeWindow !== undefined && !welcomeWindow.isDestroyed()) welcomeWindow?.webContents.send(WELCOME_IPC.state, state)
+          if (welcomeWindow && !welcomeWindow.isDestroyed()) { const win = welcomeWindow; win.webContents.send(WELCOME_IPC.state, state) }
           const attempt = state.attempt
           if (attempt?.phase === 'waiting-browser' && attempt.authorizeUrl !== undefined && openedAttempt !== attempt.id) {
             openedAttempt = attempt.id
