@@ -1202,9 +1202,10 @@ async function main(): Promise<void> {
   }
   const openInitialWindow = async (): Promise<void> => {
     if (quitting || recovery.active) return
-    const state = await readWelcomeState()
+    // Private Loom startup must not depend on DeepSeek account or API-key onboarding.
+    // Language can be selected in workspace settings after launch.
     if (isQuitting() || backend.state.phase !== 'ready') return
-    locale = resolveDesktopStartupLocale(state.localePreference, systemLanguages)
+    locale = resolveDesktopStartupLocale(undefined, systemLanguages)
     windowsLanguage = locale.id
     refreshApplicationMenu()
     if (!enteredWorkspace && false /* Loom local-first workspace: no DeepSeek login gate */) {
