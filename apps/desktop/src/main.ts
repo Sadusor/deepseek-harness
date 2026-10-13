@@ -76,6 +76,12 @@ let windowsLanguage: string | undefined
  */
 let backendReady = false
 /** Error-level console output of the primary window, attached to crash reports. */
+// Loom specialization: give this fork independent app identity and private Harness state.
+// Kept in the desktop shell; core Harness services and provider adapters are unchanged.
+app.setName('Loom')
+app.setPath('userData', join(app.getPath('appData'), 'Loom'))
+process.env.DSH_HOME ??= join(app.getPath('userData'), 'harness-home')
+
 const rendererConsole = new RendererConsoleTail()
 
 // Platform-conventional logs directory (macOS ~/Library/Logs/<name>, otherwise under userData);
@@ -925,7 +931,7 @@ async function main(): Promise<void> {
   const applicationIconPath = development ? join(app.getAppPath(), 'resources', 'icon-windows.png')
     : join(process.resourcesPath, 'icon.png')
   app.setAboutPanelOptions({
-    applicationName: 'DeepSeek Harness',
+    applicationName: 'Loom',
     applicationVersion: app.getVersion(),
     // The release has no separate build number; omit Electron's bundle version.
     version: '',
